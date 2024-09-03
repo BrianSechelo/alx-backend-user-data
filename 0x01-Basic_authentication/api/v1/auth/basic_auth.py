@@ -75,7 +75,7 @@ class BasicAuth(Auth):
         if ':' not in decoded_base64_authorization_header:
             return None, None
 
-        # Split the string into user email and password
+        # Split the string at the first ':', so the password can contain colons
         user_email, user_password = decoded_base64_authorization_header.split(':', 1)
         return user_email, user_password
 
@@ -91,9 +91,6 @@ class BasicAuth(Auth):
             User: The User instance if authentication is successful, otherwise None.
         """
         if user_email is None or not isinstance(user_email, str):
-            return None
-
-        if user_pwd is None or not isinstance(user_pwd, str):
             return None
 
         # Search for the user by email
