@@ -23,6 +23,8 @@ if auth_type == "basic_auth":
     auth = BasicAuth()
 elif auth_type == "session_auth":  # If AUTH_TYPE is session_auth, use SessionAuth
     auth = SessionAuth()
+elif auth_type == "session_exp_auth":
+    auth = SessionExpAuth() 
 elif auth_type == "auth":
     auth = Auth()
 
