@@ -40,3 +40,20 @@ class Auth:
     def current_user(self, request=None) -> TypeVar("User"):
         """Gets the current user from the request."""
         return None
+    def session_cookie(self, request=None):
+        """
+        Returns the value of the session cookie from the request.
+
+        Args:
+            request: The Flask request object from which to retrieve the cookie.
+
+        Returns:
+            The value of the cookie named _my_session_id (or another name defined by SESSION_NAME),
+            or None if the request or the cookie is not found.
+        """
+        if request is None:
+            return None
+
+        cookie_name = getenv('SESSION_NAME', '_my_session_id')
+
+        return request.cookies.get(cookie_name)
