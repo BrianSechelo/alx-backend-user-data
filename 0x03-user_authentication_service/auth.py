@@ -2,10 +2,12 @@
 """
 Module to hash password and interact with auth db
 """
-import bcrypt
-from sqlalchemy.exc import NoResultFound
 from db import DB
 from user import User
+import bcrypt
+from sqlalchemy.orm.exc import NoResultFound
+import uuid
+from typing import TypeVar
 
 def _hash_password(password: str) ->bytes:
     """
@@ -19,6 +21,13 @@ def _hash_password(password: str) ->bytes:
     salt = bcrypt.gensalt()
     hashed_pwd = bcrypt.hashpw(encoded_pwd, salt)
     return hashed_pwd
+
+def _generate_uuid() -> str:
+    """doc doc doc"""
+    return str(uuid.uuid4())
+
+
+UserT = TypeVar("UserT", bound=User)
 
 class Auth:
     """
@@ -44,3 +53,13 @@ class Auth:
         except NoResultFound:
             user = self._db.add_user(email, _hash_password(password))
             return user
+
+    def create_session(self, email: str) -> str:
+        """doc doc doc"""
+        try:
+            user = self._db.find_user_by(email=email)
+            session_id = _generate_uuid()
+            self._db.update_user(user.id, session_id=session_id)
+            return session_id
+        except NoResultFound:
+            return None
